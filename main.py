@@ -45,22 +45,16 @@ class Square:
             for i in self.possibilities:
                 if i:
                     how_many_possibilities += 1
-            if how_many_possibilities = 1:
+            if how_many_possibilities == 1:
                 for i in xrange(len(self.possibilities)):
                     if self.possibilities[i]:
                         self.value = i
+
 
 class Board:
     def __init__(self):
         self.tab = [[None for i in xrange(9)] for j in xrange(9)]
         self.read()
-
-    def read(self):
-        for i in xrange(9):
-            row = raw_input()
-            row = row.split()
-            for j in xrange(9):
-                self.tab[i][j] = Square(i, j, row[j])
 
     def __str__(self):
         res = '[\n'
@@ -72,6 +66,23 @@ class Board:
             res += ']\n'
         res += ']'
         return res
+
+    def read(self):
+        for i in xrange(9):
+            row = raw_input()
+            row = row.split()
+            for j in xrange(9):
+                self.tab[i][j] = Square(i, j, row[j])
+
+    def eliminate_possibilities(self):
+        for i in xrange(9):
+            for j in xrange(9):
+                self.tab[i][j].eliminate_possibilities()
+
+    def try_to_set_value(self):
+        for i in xrange(9):
+            for j in xrange(9):
+                self.tab[i][j].try_to_set_value()
 
 
 def main():
