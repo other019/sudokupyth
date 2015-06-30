@@ -2,11 +2,13 @@ __author__ = 'other019'
 
 
 class Square:
-    possibilities = [True for i in xrange(10)]
-    value = 0
+    def __init__(self, x, y, val):
 
-    def __init__(self):
-        pass
+        self.possibilities = [True for i in xrange(10)]
+        self.possibilities[0] = False
+        self.x = x
+        self.y = y
+        self.value = val
 
     def set_value(self, val):
         self.value = val
@@ -14,11 +16,43 @@ class Square:
     def get_value(self):
         return self.value
 
+    def eliminate_possibilities(self, bd):
+        for i in xrange(9):
+            self.possibilities[bd.tab[i][self.y].get_value()] = False
+        for i in xrange(9):
+            self.possibilities[bd.tab[self.x][i].get_value()] = False
+        if self.x < 3:
+            x_possibilities = [0, 1, 2]
+        elif 3 <= self.x < 6:
+            x_possibilities = [3, 4, 5]
+        else:
+            x_possibilities = [6, 7, 8]
+
+        if self.y < 3:
+            y_possibilities = [0, 1, 2]
+        elif 3 <= self.y < 6:
+            y_possibilities = [3, 4, 5]
+        else:
+            y_possibilities = [6, 7, 8]
+
+        for i in x_possibilities:
+            for j in y_possibilities:
+                self.possibilities[bd.tab[i][j].get_value()] = False
+
+    def try_to_set_value(self):
+        if self.value == 0:
+            how_many_possibilities = 0
+            for i in self.possibilities:
+                if i:
+                    how_many_possibilities += 1
+            if how_many_possibilities = 1:
+                for i in xrange(len(self.possibilities)):
+                    if self.possibilities[i]:
+                        self.value = i
 
 class Board:
-    tab = [[Square() for i in xrange(9)] for j in xrange(9)]
-
     def __init__(self):
+        self.tab = [[None for i in xrange(9)] for j in xrange(9)]
         self.read()
 
     def read(self):
@@ -26,7 +60,7 @@ class Board:
             row = raw_input()
             row = row.split()
             for j in xrange(9):
-                self.tab[i][j].set_value(row[j])
+                self.tab[i][j] = Square(i, j, row[j])
 
     def __str__(self):
         res = '[\n'
