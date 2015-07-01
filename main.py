@@ -4,8 +4,7 @@ __author__ = 'other019'
 class Square:
     def __init__(self, x, y, val):
 
-        self.possibilities = [True for i in xrange(10)]
-        self.possibilities[0] = False
+        self.possibilities = [i for i in xrange(1, 10)]
         self.x = x
         self.y = y
         self.value = val
@@ -18,9 +17,9 @@ class Square:
 
     def eliminate_possibilities(self, bd):
         for i in xrange(9):
-            self.possibilities[bd.tab[i][self.y].get_value()] = False
+            self.possibilities.remove(bd.tab[i][self.y].get_value())
         for i in xrange(9):
-            self.possibilities[bd.tab[self.x][i].get_value()] = False
+            self.possibilities.remove(bd.tab[self.x][i].get_value())
         if self.x < 3:
             x_possibilities = [0, 1, 2]
         elif 3 <= self.x < 6:
@@ -37,18 +36,12 @@ class Square:
 
         for i in x_possibilities:
             for j in y_possibilities:
-                self.possibilities[bd.tab[i][j].get_value()] = False
+                self.possibilities.remove(bd.tab[i][j].get_value())
 
     def try_to_set_value(self):
         if self.value == 0:
-            how_many_possibilities = 0
-            for i in self.possibilities:
-                if i:
-                    how_many_possibilities += 1
-            if how_many_possibilities == 1:
-                for i in xrange(len(self.possibilities)):
-                    if self.possibilities[i]:
-                        self.value = i
+            if len(self.possibilities) == 1:
+                self.value = self.possibilities[0]
 
 
 class Board:
