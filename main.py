@@ -1,5 +1,5 @@
 __author__ = 'other019'
-
+import sys
 
 class Square:
     def __init__(self, x, y, val):
@@ -117,7 +117,7 @@ class Board:
         for i in xrange(9):
             row = []
             for j in xrange(9):
-                if self.tab[i][j].get_value() in row and self.tab[j][i].get_value() != 0:
+                if self.tab[i][j].get_value() in row and self.tab[i][j].get_value() != 0:
                     return False
                 else:
                     row.append(self.tab[i][j].get_value())
@@ -138,6 +138,10 @@ class Board:
                             return False
                         else:
                             box.append(self.tab[j][i].get_value())
+        for i in xrange(9):
+            for j in xrange(9):
+                if self.tab[i][j].get_value() == 0 and len(self.tab[i][j].possibilities) == 0:
+                    return False
         return True
 
 
@@ -155,15 +159,16 @@ def solve(bd):
                 for i in bd.tab[x][y].possibilities:
                     bd2 = bd
                     bd2.tab[x][y].set_value(i)
+                    print bd2
                     solve(bd2)
     print bd
-    return 0
+    sys.exit(0)
 
 
 def main():
     board = Board()
     board.read()
-
+    solve(board)
 
 if __name__ == '__main__':
     main()
